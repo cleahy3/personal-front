@@ -1,6 +1,7 @@
 var appDispatcher = require('../dispatcher/appDispatcher.js');
 var merge = require('merge');
 var EventEmitter = require('events').EventEmitter;
+var axios = require('axios');
 var Constants = require('../constants/constants.jsx');
 var _data = {
     people: [{
@@ -69,6 +70,12 @@ var _data = {
 }
 var MainStore = merge(EventEmitter.prototype, {
     getData: function() {
+       axios.get('http://localhost:3000/')
+                .then(function(response) {
+                    console.log(response.data)
+                    return response;
+
+                });
         return _data
     },
     handleAction: function(payload) {
