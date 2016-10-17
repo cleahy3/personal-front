@@ -1,0 +1,75 @@
+@import 'https://fonts.googleapis.com/css?family=Rubik+One';
+@import url('https://fonts.googleapis.com/css?family=Proza+Libre');
+#app{
+	padding-top: 2em;
+	background: url(../img/office.jpg);
+	max-width: 90%;
+	margin:0px auto;
+	height:1450px;
+	max-height: 100%;
+	color: white;
+	text-align: center;
+	font-family: 'Proza Libre', sans-serif;
+}
+header{
+	text-align: center;
+	font-family: 'Taviraj', serif;
+	font-size: 30px;
+	max-width: 90%;
+	margin: 0px auto;
+	display: block;
+	color: white;
+	background-color: black;
+}
+#navBar{
+	display:inline-flex;
+	margin-left:0px auto;
+	font-size: 20px;
+	text-align: center;
+	border-radius
+}
+#button {
+  color: #900;
+  margin-left: 1em;
+  border: 1px solid #900;
+  font-size: 20px;
+  font-weight: bold;
+}
+#table{
+	float: left;
+	color: white;
+	text-align: center;
+	font-family: 'Proza Libre', sans-serif;
+	max-width: 40%;
+	margin: 2em;
+	clear:left;
+}
+#caption{
+	padding-top: 5em;
+	font-size: 20px;
+}
+#emoticon{
+	font-size:20px;
+}
+#browsePerson{
+	padding-top: 2em;
+	color: white;
+	font-size:20px;
+	max-width: 30%;
+	text-align: center;
+	margin: 0px auto;
+	font-family: 'Proza Libre', sans-serif;
+
+}
+#browseButtons{
+	display:inline-flex;
+}
+#table1{
+	color: white;
+	text-align: center;
+	float: right;
+	font-family: 'Proza Libre', sans-serif;
+	max-width: 40%;
+	margin: 2em;
+	clear: right;
+}
