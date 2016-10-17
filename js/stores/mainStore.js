@@ -28,7 +28,7 @@ var _data = {
         rating: 84,
         isLiked: false
 
-    },{
+    }, {
         name: "Trevor Stephens",
         emoticon: 'http://www.placecage.com/c/200/300',
         bio: "Beer maven. Professional twitter ninja. Tv guru. Explorer. Social media advocate. Alcohol fan. Hipster-friendly reader. Analyst. Internet trailblazer.",
@@ -54,35 +54,60 @@ var _data = {
         isLiked: false
 
     }],
-    favourites:[]
+    favourites: [],
+    authUser: [{
+        user: 'test',
+        password: 'test'
+    }, {
+        user: 'test1',
+        password: 'test1'
+    }],
+    compareUser: {}
 }
 var MainStore = merge(EventEmitter.prototype, {
     getData: function() {
         return _data
     },
-    handleAction: function (payload) {
-    switch (payload.action) {
-        case Constants.HOME_CLICKED:
-            MainStore.emit('showHome');
-            break;
-        case Constants.BROWSE_CLICKED:
-            MainStore.emit('showBrowse');
-            break;
-        case Constants.LOGIN_CLICKED:
-            MainStore.emit('showLogin');
-            break;
-        case Constants.LIKE:
-        	MainStore.emit('liked');
-        	_data.favourites.push(_data.people[payload.data]);
-        	break;
-        case Constants.DISLIKE:
-        	MainStore.emit('disliked');
-        	_data.people.splice(payload.data,1);
-        	break;
-        default:
-            break;
+    handleAction: function(payload) {
+        switch (payload.action) {
+            case Constants.HOME_CLICKED:
+                MainStore.emit('showHome');
+                break;
+            case Constants.BROWSE_CLICKED:
+                MainStore.emit('showBrowse');
+                break;
+            case Constants.LOGIN_CLICKED:
+                MainStore.emit('showLogin');
+                break;
+            case Constants.LIKE:
+                MainStore.emit('liked');
+                _data.favourites.push(_data.people[payload.data]);
+                break;
+            case Constants.DISLIKE:
+                MainStore.emit('disliked');
+                _data.people.splice(payload.data, 1);
+                break;
+            case Constants.LOGIN_SUBMIT:
+                console.log(payload.data);
+                _data.compareUser = payload.data;
+                MainStore.handleLogin();
+                break;
+            case Constants.LOGOUT:
+            	MainStore.emit('logout');
+            	break;
+            default:
+                break;
+        }
+    },
+    handleLogin: function(){
+    	
+    	console.log(_data.compareUser);
+    	for(var i = 0; i < _data.authUser.length; i++){
+    		if(_data.authUser[i].user==_data.compareUser.user && _data.authUser[i].password==_data.compareUser.password ){
+    			MainStore.emit('loggedIn');
+    		}
+    	}
     }
-}
 })
 appDispatcher.register(MainStore.handleAction);
 

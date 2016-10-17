@@ -3,7 +3,9 @@ var Constants = {
 	BROWSE_CLICKED: 'Browse',
 	LOGIN_CLICKED: 'Login',
 	LIKE: 'Like',
-	DISLIKE: 'Dislike'
+	DISLIKE: 'Dislike',
+	LOGIN_SUBMIT: 'Sign In',
+	LOGOUT: 'Log Out'
 
 }
 module.exports = Constants;

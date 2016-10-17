@@ -1,5 +1,6 @@
 var MainStore = require('../stores/mainStore.js');
 var PeopleList = require('./peopleList.jsx');
+var LoginForm = require('./loginForm.jsx');
 var Favourites = require('./favourites.jsx');
 var Browse = require('./browse.jsx');
 var App = React.createClass({
@@ -14,8 +15,10 @@ var App = React.createClass({
 	      MainStore.on('showLogin',this.showLogin);
 	      MainStore.on('disliked',this.showDislike);
 	      MainStore.on('liked',this.showLike);
+	      MainStore.on('loggedIn', this.showHome);
 	},
 	showLogin: function(){
+		console.log('login clicked');
 		this.setState({
 			page:'login'
 		})
@@ -81,6 +84,9 @@ var App = React.createClass({
 			case 'like':
 			return (
 				<h3> The Person You Clicked Has Been Added To Your Favourites </h3>)
+			break;
+			case 'login':
+				return(<LoginForm />)
 			break;
 			default:
 			return(

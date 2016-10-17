@@ -50,7 +50,7 @@
 	'use strict';
 	
 	var App = __webpack_require__(/*! ./components/app.jsx */ 1);
-	var Nav = __webpack_require__(/*! ./components/nav.jsx */ 2);
+	var Nav = __webpack_require__(/*! ./components/nav.jsx */ 18);
 	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 	
 	ReactDOM.render(React.createElement(Nav, null), document.getElementById('nav'));
@@ -64,8 +64,9 @@
 
 	'use strict';
 	
-	var MainStore = __webpack_require__(/*! ../stores/mainStore.js */ 10);
-	var PeopleList = __webpack_require__(/*! ./peopleList.jsx */ 14);
+	var MainStore = __webpack_require__(/*! ../stores/mainStore.js */ 2);
+	var PeopleList = __webpack_require__(/*! ./peopleList.jsx */ 12);
+	var LoginForm = __webpack_require__(/*! ./loginForm.jsx */ 14);
 	var Favourites = __webpack_require__(/*! ./favourites.jsx */ 16);
 	var Browse = __webpack_require__(/*! ./browse.jsx */ 17);
 	var App = React.createClass({
@@ -82,8 +83,10 @@
 			MainStore.on('showLogin', this.showLogin);
 			MainStore.on('disliked', this.showDislike);
 			MainStore.on('liked', this.showLike);
+			MainStore.on('loggedIn', this.showHome);
 		},
 		showLogin: function showLogin() {
+			console.log('login clicked');
 			this.setState({
 				page: 'login'
 			});
@@ -155,6 +158,9 @@
 						' The Person You Clicked Has Been Added To Your Favourites '
 					);
 					break;
+				case 'login':
+					return React.createElement(LoginForm, null);
+					break;
 				default:
 					return React.createElement(
 						'h1',
@@ -170,96 +176,130 @@
 
 /***/ },
 /* 2 */
-/*!*******************************!*\
-  !*** ./js/components/nav.jsx ***!
-  \*******************************/
+/*!********************************!*\
+  !*** ./js/stores/mainStore.js ***!
+  \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Button = __webpack_require__(/*! ./button.jsx */ 3);
-	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 4);
-	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 5);
-	var Nav = React.createClass({
-		displayName: 'Nav',
+	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 3);
+	var merge = __webpack_require__(/*! merge */ 8);
+	var EventEmitter = __webpack_require__(/*! events */ 10).EventEmitter;
+	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 11);
+	var _data = {
+	    people: [{
+	        name: "Callum Leahy",
+	        emoticon: 'http://www.placecage.com/200/300',
+	        bio: "Proud problem solver. Future teen idol. Twitter fan. Unable to type with boxing gloves on. Social media guru. Entrepreneur. Hardcore food lover. Zombie buff.",
+	        rating: 100,
+	        isLiked: false
+	    }, {
+	        name: "Jeff Bridges",
+	        emoticon: 'http://www.placecage.com/gif/200/300',
+	        bio: "Evil music ninja. Travel enthusiast. Proud internet fanatic. Professional problem solver. Tv advocate. Zombie geek.",
+	        rating: 63,
+	        isLiked: false
+	    }, {
+	        name: "Colin Jones",
+	        emoticon: 'http://www.placecage.com/c/200/300',
+	        bio: "Organizer. Alcohol expert. Total beer trailblazer. Certified food specialist. Devoted analyst. Bacon advocate.",
+	        rating: 34,
+	        isLiked: false
+	    }, {
+	        name: "Adam Willerton",
+	        emoticon: 'http://fillmurray.com/g/200/300',
+	        bio: "Extreme twitter aficionado. Creator. Communicator. Hardcore travel fanatic.",
+	        rating: 84,
+	        isLiked: false
 	
-		getInitialState: function getInitialState() {
-			return {
-				page_state: 'home'
-			};
-		},
-		handleClick: function handleClick(constant) {
-			appDispatcher.dispatch({
-				action: constant
-			});
-		},
+	    }, {
+	        name: "Trevor Stephens",
+	        emoticon: 'http://www.placecage.com/c/200/300',
+	        bio: "Beer maven. Professional twitter ninja. Tv guru. Explorer. Social media advocate. Alcohol fan. Hipster-friendly reader. Analyst. Internet trailblazer.",
+	        rating: 78,
+	        isLiked: false
+	    }, {
+	        name: "William Wallace",
+	        emoticon: 'http://fillmurray.com/200/300',
+	        bio: "Future teen idol. Professional bacon maven. Subtly charming twitter buff. Music aficionado.",
+	        rating: 57,
+	        isLiked: false
+	    }, {
+	        name: "Phil Peters",
+	        emoticon: 'http://stevensegallery.com/g/200/300',
+	        bio: "Problem solver. Proud travel evangelist. Friendly internet geek. Alcohol maven. Explorer.",
+	        rating: 92,
+	        isLiked: false
+	    }, {
+	        name: "Kevin Smith",
+	        emoticon: 'http://stevensegallery.com/200/300',
+	        bio: "Student. Subtly charming tv practitioner. Friendly analyst. Friend of animals everywhere.",
+	        rating: 70,
+	        isLiked: false
 	
-		render: function render() {
+	    }],
+	    favourites: [],
+	    authUser: [{
+	        user: 'test',
+	        password: 'test'
+	    }, {
+	        user: 'test1',
+	        password: 'test1'
+	    }],
+	    compareUser: {}
+	};
+	var MainStore = merge(EventEmitter.prototype, {
+	    getData: function getData() {
+	        return _data;
+	    },
+	    handleAction: function handleAction(payload) {
+	        switch (payload.action) {
+	            case Constants.HOME_CLICKED:
+	                MainStore.emit('showHome');
+	                break;
+	            case Constants.BROWSE_CLICKED:
+	                MainStore.emit('showBrowse');
+	                break;
+	            case Constants.LOGIN_CLICKED:
+	                MainStore.emit('showLogin');
+	                break;
+	            case Constants.LIKE:
+	                MainStore.emit('liked');
+	                _data.favourites.push(_data.people[payload.data]);
+	                break;
+	            case Constants.DISLIKE:
+	                MainStore.emit('disliked');
+	                _data.people.splice(payload.data, 1);
+	                break;
+	            case Constants.LOGIN_SUBMIT:
+	                console.log(payload.data);
+	                _data.compareUser = payload.data;
+	                MainStore.handleLogin();
+	                break;
+	            case Constants.LOGOUT:
+	                MainStore.emit('logout');
+	                break;
+	            default:
+	                break;
+	        }
+	    },
+	    handleLogin: function handleLogin() {
 	
-			return React.createElement(
-				'header',
-				null,
-				' Missile Job Seeker',
-				React.createElement(
-					'nav',
-					{ id: 'navBar' },
-					React.createElement(Button, { constant: Constants.HOME_CLICKED, handleClick: this.handleClick }),
-					React.createElement(Button, { constant: Constants.BROWSE_CLICKED, handleClick: this.handleClick }),
-					React.createElement(Button, { constant: Constants.LOGIN_CLICKED, handleClick: this.handleClick })
-				)
-			);
-		}
+	        console.log(_data.compareUser);
+	        for (var i = 0; i < _data.authUser.length; i++) {
+	            if (_data.authUser[i].user == _data.compareUser.user && _data.authUser[i].password == _data.compareUser.password) {
+	                MainStore.emit('loggedIn');
+	            }
+	        }
+	    }
 	});
+	appDispatcher.register(MainStore.handleAction);
 	
-	module.exports = Nav;
+	module.exports = MainStore;
 
 /***/ },
 /* 3 */
-/*!**********************************!*\
-  !*** ./js/components/button.jsx ***!
-  \**********************************/
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	var Button = React.createClass({
-		displayName: "Button",
-	
-		handleClick: function handleClick() {
-			console.log('hlelo');
-			this.props.handleClick(this.props.constant);
-		},
-		render: function render() {
-			return React.createElement(
-				"div",
-				null,
-				React.createElement("input", { id: "button", type: "submit", value: this.props.constant, onClick: this.handleClick })
-			);
-		}
-	});
-	module.exports = Button;
-
-/***/ },
-/* 4 */
-/*!************************************!*\
-  !*** ./js/constants/constants.jsx ***!
-  \************************************/
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	var Constants = {
-		HOME_CLICKED: 'Home',
-		BROWSE_CLICKED: 'Browse',
-		LOGIN_CLICKED: 'Login',
-		LIKE: 'Like',
-		DISLIKE: 'Dislike'
-	
-	};
-	module.exports = Constants;
-
-/***/ },
-/* 5 */
 /*!****************************************!*\
   !*** ./js/dispatcher/appDispatcher.js ***!
   \****************************************/
@@ -267,14 +307,14 @@
 
 	'use strict';
 	
-	var Dispatcher = __webpack_require__(/*! flux */ 6).Dispatcher;
+	var Dispatcher = __webpack_require__(/*! flux */ 4).Dispatcher;
 	
 	var appDispatcher = new Dispatcher();
 	
 	module.exports = appDispatcher;
 
 /***/ },
-/* 6 */
+/* 4 */
 /*!*************************!*\
   !*** ./~/flux/index.js ***!
   \*************************/
@@ -289,11 +329,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(/*! ./lib/Dispatcher */ 7);
+	module.exports.Dispatcher = __webpack_require__(/*! ./lib/Dispatcher */ 5);
 
 
 /***/ },
-/* 7 */
+/* 5 */
 /*!**********************************!*\
   !*** ./~/flux/lib/Dispatcher.js ***!
   \**********************************/
@@ -318,7 +358,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 9);
+	var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 7);
 	
 	var _prefix = 'ID_';
 	
@@ -532,10 +572,10 @@
 	})();
 	
 	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 8)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 6)))
 
 /***/ },
-/* 8 */
+/* 6 */
 /*!******************************!*\
   !*** ./~/process/browser.js ***!
   \******************************/
@@ -724,7 +764,7 @@
 
 
 /***/ },
-/* 9 */
+/* 7 */
 /*!*********************************!*\
   !*** ./~/fbjs/lib/invariant.js ***!
   \*********************************/
@@ -779,109 +819,10 @@
 	}
 	
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 8)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 6)))
 
 /***/ },
-/* 10 */
-/*!********************************!*\
-  !*** ./js/stores/mainStore.js ***!
-  \********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 5);
-	var merge = __webpack_require__(/*! merge */ 11);
-	var EventEmitter = __webpack_require__(/*! events */ 13).EventEmitter;
-	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 4);
-	var _data = {
-	    people: [{
-	        name: "Callum Leahy",
-	        emoticon: 'http://www.placecage.com/200/300',
-	        bio: "Proud problem solver. Future teen idol. Twitter fan. Unable to type with boxing gloves on. Social media guru. Entrepreneur. Hardcore food lover. Zombie buff.",
-	        rating: 100,
-	        isLiked: false
-	    }, {
-	        name: "Jeff Bridges",
-	        emoticon: 'http://www.placecage.com/gif/200/300',
-	        bio: "Evil music ninja. Travel enthusiast. Proud internet fanatic. Professional problem solver. Tv advocate. Zombie geek.",
-	        rating: 63,
-	        isLiked: false
-	    }, {
-	        name: "Colin Jones",
-	        emoticon: 'http://www.placecage.com/c/200/300',
-	        bio: "Organizer. Alcohol expert. Total beer trailblazer. Certified food specialist. Devoted analyst. Bacon advocate.",
-	        rating: 34,
-	        isLiked: false
-	    }, {
-	        name: "Adam Willerton",
-	        emoticon: 'http://fillmurray.com/g/200/300',
-	        bio: "Extreme twitter aficionado. Creator. Communicator. Hardcore travel fanatic.",
-	        rating: 84,
-	        isLiked: false
-	
-	    }, {
-	        name: "Trevor Stephens",
-	        emoticon: 'http://www.placecage.com/c/200/300',
-	        bio: "Beer maven. Professional twitter ninja. Tv guru. Explorer. Social media advocate. Alcohol fan. Hipster-friendly reader. Analyst. Internet trailblazer.",
-	        rating: 78,
-	        isLiked: false
-	    }, {
-	        name: "William Wallace",
-	        emoticon: 'http://fillmurray.com/200/300',
-	        bio: "Future teen idol. Professional bacon maven. Subtly charming twitter buff. Music aficionado.",
-	        rating: 57,
-	        isLiked: false
-	    }, {
-	        name: "Phil Peters",
-	        emoticon: 'http://stevensegallery.com/g/200/300',
-	        bio: "Problem solver. Proud travel evangelist. Friendly internet geek. Alcohol maven. Explorer.",
-	        rating: 92,
-	        isLiked: false
-	    }, {
-	        name: "Kevin Smith",
-	        emoticon: 'http://stevensegallery.com/200/300',
-	        bio: "Student. Subtly charming tv practitioner. Friendly analyst. Friend of animals everywhere.",
-	        rating: 70,
-	        isLiked: false
-	
-	    }],
-	    favourites: []
-	};
-	var MainStore = merge(EventEmitter.prototype, {
-	    getData: function getData() {
-	        return _data;
-	    },
-	    handleAction: function handleAction(payload) {
-	        switch (payload.action) {
-	            case Constants.HOME_CLICKED:
-	                MainStore.emit('showHome');
-	                break;
-	            case Constants.BROWSE_CLICKED:
-	                MainStore.emit('showBrowse');
-	                break;
-	            case Constants.LOGIN_CLICKED:
-	                MainStore.emit('showLogin');
-	                break;
-	            case Constants.LIKE:
-	                MainStore.emit('liked');
-	                _data.favourites.push(_data.people[payload.data]);
-	                break;
-	            case Constants.DISLIKE:
-	                MainStore.emit('disliked');
-	                _data.people.splice(payload.data, 1);
-	                break;
-	            default:
-	                break;
-	        }
-	    }
-	});
-	appDispatcher.register(MainStore.handleAction);
-	
-	module.exports = MainStore;
-
-/***/ },
-/* 11 */
+/* 8 */
 /*!**************************!*\
   !*** ./~/merge/merge.js ***!
   \**************************/
@@ -1062,10 +1003,10 @@
 		}
 	
 	})(typeof module === 'object' && module && typeof module.exports === 'object' && module.exports);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/module.js */ 12)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/module.js */ 9)(module)))
 
 /***/ },
-/* 12 */
+/* 9 */
 /*!***********************************!*\
   !*** (webpack)/buildin/module.js ***!
   \***********************************/
@@ -1084,7 +1025,7 @@
 
 
 /***/ },
-/* 13 */
+/* 10 */
 /*!****************************!*\
   !*** ./~/events/events.js ***!
   \****************************/
@@ -1395,7 +1336,28 @@
 
 
 /***/ },
-/* 14 */
+/* 11 */
+/*!************************************!*\
+  !*** ./js/constants/constants.jsx ***!
+  \************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var Constants = {
+		HOME_CLICKED: 'Home',
+		BROWSE_CLICKED: 'Browse',
+		LOGIN_CLICKED: 'Login',
+		LIKE: 'Like',
+		DISLIKE: 'Dislike',
+		LOGIN_SUBMIT: 'Sign In',
+		LOGOUT: 'Log Out'
+	
+	};
+	module.exports = Constants;
+
+/***/ },
+/* 12 */
 /*!**************************************!*\
   !*** ./js/components/peopleList.jsx ***!
   \**************************************/
@@ -1403,7 +1365,7 @@
 
 	"use strict";
 	
-	var Person = __webpack_require__(/*! ./person.jsx */ 15);
+	var Person = __webpack_require__(/*! ./person.jsx */ 13);
 	var PeopleList = React.createClass({
 		displayName: "PeopleList",
 	
@@ -1458,7 +1420,7 @@
 	module.exports = PeopleList;
 
 /***/ },
-/* 15 */
+/* 13 */
 /*!**********************************!*\
   !*** ./js/components/person.jsx ***!
   \**********************************/
@@ -1499,6 +1461,75 @@
 	module.exports = Person;
 
 /***/ },
+/* 14 */
+/*!*************************************!*\
+  !*** ./js/components/loginForm.jsx ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Button = __webpack_require__(/*! ./button.jsx */ 15);
+	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 11);
+	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 3);
+	var LoginForm = React.createClass({
+		displayName: 'LoginForm',
+	
+		handleClick: function handleClick(constant) {
+			appDispatcher.dispatch({
+				action: constant,
+				data: { user: document.getElementById('name').value,
+					password: document.getElementById('password').value
+				}
+			});
+			console.log(constant);
+		},
+		render: function render() {
+			return React.createElement(
+				'div',
+				{ className: 'loginForm' },
+				React.createElement(
+					'h3',
+					null,
+					' Login Form '
+				),
+				React.createElement('input', { type: 'text', id: 'name', placeholder: 'username' }),
+				React.createElement('br', null),
+				React.createElement('input', { type: 'text', id: 'password', placeholder: 'password' }),
+				React.createElement('br', null),
+				React.createElement(Button, { constant: Constants.LOGIN_SUBMIT, handleClick: this.handleClick })
+			);
+		}
+	});
+	module.exports = LoginForm;
+
+/***/ },
+/* 15 */
+/*!**********************************!*\
+  !*** ./js/components/button.jsx ***!
+  \**********************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var Button = React.createClass({
+		displayName: "Button",
+	
+		handleClick: function handleClick() {
+			console.log('hlelo');
+			this.props.handleClick(this.props.constant);
+		},
+		render: function render() {
+			return React.createElement(
+				"div",
+				null,
+				React.createElement("input", { id: "button", type: "submit", value: this.props.constant, onClick: this.handleClick })
+			);
+		}
+	});
+	module.exports = Button;
+
+/***/ },
 /* 16 */
 /*!**************************************!*\
   !*** ./js/components/favourites.jsx ***!
@@ -1507,7 +1538,7 @@
 
 	"use strict";
 	
-	var Person = __webpack_require__(/*! ./person.jsx */ 15);
+	var Person = __webpack_require__(/*! ./person.jsx */ 13);
 	var Favourites = React.createClass({
 		displayName: "Favourites",
 	
@@ -1566,9 +1597,9 @@
 
 	'use strict';
 	
-	var Button = __webpack_require__(/*! ./button.jsx */ 3);
-	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 5);
-	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 4);
+	var Button = __webpack_require__(/*! ./button.jsx */ 15);
+	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 3);
+	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 11);
 	var Browse = React.createClass({
 		displayName: 'Browse',
 	
@@ -1623,6 +1654,78 @@
 	});
 	
 	module.exports = Browse;
+
+/***/ },
+/* 18 */
+/*!*******************************!*\
+  !*** ./js/components/nav.jsx ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Button = __webpack_require__(/*! ./button.jsx */ 15);
+	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 11);
+	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 3);
+	var MainStore = __webpack_require__(/*! ../stores/mainStore.js */ 2);
+	var Nav = React.createClass({
+		displayName: 'Nav',
+	
+		getInitialState: function getInitialState() {
+			return {
+				page_state: 'home',
+				login_state: false
+			};
+		}, componentDidMount: function componentDidMount() {
+			MainStore.on('loggedIn', this.loggedIn);
+			MainStore.on('logout', this.logOut);
+		},
+		handleClick: function handleClick(constant) {
+			console.log(constant);
+			appDispatcher.dispatch({
+				action: constant
+			});
+		},
+		loggedIn: function loggedIn() {
+			this.setState({
+				login_state: true
+			});
+		}, logOut: function logOut() {
+			this.setState({
+				login_state: false
+			});
+		},
+	
+		render: function render() {
+			if (this.state.login_state == true) {
+				return React.createElement(
+					'header',
+					null,
+					' Missile Job Seeker',
+					React.createElement(
+						'nav',
+						{ id: 'navBar' },
+						React.createElement(Button, { constant: Constants.HOME_CLICKED, handleClick: this.handleClick }),
+						React.createElement(Button, { constant: Constants.BROWSE_CLICKED, handleClick: this.handleClick }),
+						React.createElement(Button, { constant: Constants.LOGOUT, handleClick: this.handleClick })
+					)
+				);
+			} else {
+				return React.createElement(
+					'header',
+					null,
+					' Missile Job Seeker',
+					React.createElement(
+						'nav',
+						{ id: 'navBar' },
+						React.createElement(Button, { constant: Constants.LOGIN_CLICKED, handleClick: this.handleClick })
+					)
+				);
+			}
+		}
+	});
+	
+	module.exports = Nav;
 
 /***/ }
 /******/ ]);
