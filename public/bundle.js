@@ -50,7 +50,7 @@
 	'use strict';
 	
 	var App = __webpack_require__(/*! ./components/app.jsx */ 1);
-	var Nav = __webpack_require__(/*! ./components/nav.jsx */ 18);
+	var Nav = __webpack_require__(/*! ./components/nav.jsx */ 15);
 	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 	
 	ReactDOM.render(React.createElement(Nav, null), document.getElementById('nav'));
@@ -65,10 +65,10 @@
 	'use strict';
 	
 	var MainStore = __webpack_require__(/*! ../stores/mainStore.js */ 2);
-	var PeopleList = __webpack_require__(/*! ./peopleList.jsx */ 12);
-	var LoginForm = __webpack_require__(/*! ./loginForm.jsx */ 14);
-	var Favourites = __webpack_require__(/*! ./favourites.jsx */ 16);
-	var Browse = __webpack_require__(/*! ./browse.jsx */ 17);
+	var PeopleList = __webpack_require__(/*! ./peopleList.jsx */ 3);
+	var LoginForm = __webpack_require__(/*! ./loginForm.jsx */ 5);
+	var Favourites = __webpack_require__(/*! ./favourites.jsx */ 13);
+	var Browse = __webpack_require__(/*! ./browse.jsx */ 14);
 	var App = React.createClass({
 		displayName: 'App',
 	
@@ -126,12 +126,12 @@
 			switch (this.state.page) {
 				case 'home':
 					console.log(this.state.data);
-					if (this.state.data.favourites[0]) {
+					if (this.state.data.authUser[this.state.data.loggedIndex].favourites[0]) {
 						return React.createElement(
 							'div',
 							{ id: 'tables' },
 							React.createElement(PeopleList, { people: this.state.data.people }),
-							React.createElement(Favourites, { favourites: this.state.data.favourites })
+							React.createElement(Favourites, { favourites: this.state.data.authUser[this.state.data.loggedIndex].favourites })
 						);
 					} else {
 						return React.createElement(
@@ -183,10 +183,10 @@
 
 	'use strict';
 	
-	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 3);
-	var merge = __webpack_require__(/*! merge */ 8);
-	var EventEmitter = __webpack_require__(/*! events */ 10).EventEmitter;
-	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 11);
+	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 8);
+	var merge = __webpack_require__(/*! merge */ 16);
+	var EventEmitter = __webpack_require__(/*! events */ 18).EventEmitter;
+	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 7);
 	var _data = {
 	    people: [{
 	        name: "Callum Leahy",
@@ -242,12 +242,15 @@
 	    favourites: [],
 	    authUser: [{
 	        user: 'test',
-	        password: 'test'
+	        password: 'test',
+	        favourites: []
 	    }, {
 	        user: 'test1',
-	        password: 'test1'
+	        password: 'test1',
+	        favourites: []
 	    }],
-	    compareUser: {}
+	    compareUser: {},
+	    loggedIndex: 0
 	};
 	var MainStore = merge(EventEmitter.prototype, {
 	    getData: function getData() {
@@ -266,7 +269,7 @@
 	                break;
 	            case Constants.LIKE:
 	                MainStore.emit('liked');
-	                _data.favourites.push(_data.people[payload.data]);
+	                _data.authUser[_data.loggedIndex].favourites.push(_data.people[payload.data]);
 	                break;
 	            case Constants.DISLIKE:
 	                MainStore.emit('disliked');
@@ -279,7 +282,7 @@
 	                break;
 	            case Constants.LOGOUT:
 	                MainStore.emit('logout');
-	                break;
+	                _data.break;
 	            default:
 	                break;
 	        }
@@ -290,6 +293,7 @@
 	        for (var i = 0; i < _data.authUser.length; i++) {
 	            if (_data.authUser[i].user == _data.compareUser.user && _data.authUser[i].password == _data.compareUser.password) {
 	                MainStore.emit('loggedIn');
+	                _data.loggedIndex = i;
 	            }
 	        }
 	    }
@@ -300,6 +304,200 @@
 
 /***/ },
 /* 3 */
+/*!**************************************!*\
+  !*** ./js/components/peopleList.jsx ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var Person = __webpack_require__(/*! ./person.jsx */ 4);
+	var PeopleList = React.createClass({
+		displayName: "PeopleList",
+	
+		render: function render() {
+			var people = this.props.people.map(function (person, i) {
+				if (i % 2 == 0) {
+					return;
+				} else {
+					return React.createElement(Person, { key: i, name: person.name, bio: person.bio, rating: person.rating, emoticon: person.emoticon });
+				}
+			});
+			return React.createElement(
+				"table",
+				{ id: "table" },
+				React.createElement(
+					"caption",
+					{ id: "caption" },
+					"Highlights"
+				),
+				React.createElement(
+					"thead",
+					null,
+					React.createElement(
+						"tr",
+						null,
+						React.createElement(
+							"th",
+							null,
+							"Name"
+						),
+						React.createElement(
+							"th",
+							null,
+							"Bio"
+						),
+						React.createElement(
+							"th",
+							null,
+							"Rating"
+						)
+					)
+				),
+				React.createElement(
+					"tbody",
+					null,
+					people
+				)
+			);
+		}
+	});
+	
+	module.exports = PeopleList;
+
+/***/ },
+/* 4 */
+/*!**********************************!*\
+  !*** ./js/components/person.jsx ***!
+  \**********************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var Person = React.createClass({
+		displayName: "Person",
+	
+		render: function render() {
+			return React.createElement(
+				"tr",
+				null,
+				React.createElement(
+					"td",
+					null,
+					this.props.name
+				),
+				React.createElement(
+					"td",
+					{ id: "emoticon" },
+					React.createElement("img", { src: this.props.emoticon })
+				),
+				React.createElement(
+					"td",
+					null,
+					this.props.bio
+				),
+				React.createElement(
+					"td",
+					null,
+					this.props.rating
+				)
+			);
+		}
+	});
+	module.exports = Person;
+
+/***/ },
+/* 5 */
+/*!*************************************!*\
+  !*** ./js/components/loginForm.jsx ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Button = __webpack_require__(/*! ./button.jsx */ 6);
+	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 7);
+	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 8);
+	var LoginForm = React.createClass({
+		displayName: 'LoginForm',
+	
+		handleClick: function handleClick(constant) {
+			appDispatcher.dispatch({
+				action: constant,
+				data: { user: document.getElementById('name').value,
+					password: document.getElementById('password').value
+				}
+			});
+			console.log(constant);
+		},
+		render: function render() {
+			return React.createElement(
+				'div',
+				{ className: 'loginForm' },
+				React.createElement(
+					'h3',
+					null,
+					' Login Form '
+				),
+				React.createElement('input', { type: 'text', id: 'name', placeholder: 'username' }),
+				React.createElement('br', null),
+				React.createElement('input', { type: 'text', id: 'password', placeholder: 'password' }),
+				React.createElement('br', null),
+				React.createElement(Button, { constant: Constants.LOGIN_SUBMIT, handleClick: this.handleClick })
+			);
+		}
+	});
+	module.exports = LoginForm;
+
+/***/ },
+/* 6 */
+/*!**********************************!*\
+  !*** ./js/components/button.jsx ***!
+  \**********************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var Button = React.createClass({
+		displayName: "Button",
+	
+		handleClick: function handleClick() {
+			console.log('hlelo');
+			this.props.handleClick(this.props.constant);
+		},
+		render: function render() {
+			return React.createElement(
+				"div",
+				null,
+				React.createElement("input", { id: "button", type: "submit", value: this.props.constant, onClick: this.handleClick })
+			);
+		}
+	});
+	module.exports = Button;
+
+/***/ },
+/* 7 */
+/*!************************************!*\
+  !*** ./js/constants/constants.jsx ***!
+  \************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var Constants = {
+		HOME_CLICKED: 'Home',
+		BROWSE_CLICKED: 'Browse',
+		LOGIN_CLICKED: 'Login',
+		LIKE: 'Like',
+		DISLIKE: 'Dislike',
+		LOGIN_SUBMIT: 'Sign In',
+		LOGOUT: 'Log Out'
+	
+	};
+	module.exports = Constants;
+
+/***/ },
+/* 8 */
 /*!****************************************!*\
   !*** ./js/dispatcher/appDispatcher.js ***!
   \****************************************/
@@ -307,14 +505,14 @@
 
 	'use strict';
 	
-	var Dispatcher = __webpack_require__(/*! flux */ 4).Dispatcher;
+	var Dispatcher = __webpack_require__(/*! flux */ 9).Dispatcher;
 	
 	var appDispatcher = new Dispatcher();
 	
 	module.exports = appDispatcher;
 
 /***/ },
-/* 4 */
+/* 9 */
 /*!*************************!*\
   !*** ./~/flux/index.js ***!
   \*************************/
@@ -329,11 +527,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(/*! ./lib/Dispatcher */ 5);
+	module.exports.Dispatcher = __webpack_require__(/*! ./lib/Dispatcher */ 10);
 
 
 /***/ },
-/* 5 */
+/* 10 */
 /*!**********************************!*\
   !*** ./~/flux/lib/Dispatcher.js ***!
   \**********************************/
@@ -358,7 +556,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 7);
+	var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 12);
 	
 	var _prefix = 'ID_';
 	
@@ -572,10 +770,10 @@
 	})();
 	
 	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 6)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 11)))
 
 /***/ },
-/* 6 */
+/* 11 */
 /*!******************************!*\
   !*** ./~/process/browser.js ***!
   \******************************/
@@ -764,7 +962,7 @@
 
 
 /***/ },
-/* 7 */
+/* 12 */
 /*!*********************************!*\
   !*** ./~/fbjs/lib/invariant.js ***!
   \*********************************/
@@ -819,10 +1017,209 @@
 	}
 	
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 6)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 11)))
 
 /***/ },
-/* 8 */
+/* 13 */
+/*!**************************************!*\
+  !*** ./js/components/favourites.jsx ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var Person = __webpack_require__(/*! ./person.jsx */ 4);
+	var Favourites = React.createClass({
+		displayName: "Favourites",
+	
+		render: function render() {
+			console.log(this.props.favourites);
+			var people = this.props.favourites.map(function (person, i) {
+	
+				return React.createElement(Person, { key: i, name: person.name, bio: person.bio, rating: person.rating, emoticon: person.emoticon });
+			});
+			return React.createElement(
+				"table",
+				{ id: "table1" },
+				React.createElement(
+					"caption",
+					{ id: "caption" },
+					"Favourites"
+				),
+				React.createElement(
+					"thead",
+					null,
+					React.createElement(
+						"tr",
+						null,
+						React.createElement(
+							"th",
+							null,
+							"Name"
+						),
+						React.createElement(
+							"th",
+							null,
+							"Bio"
+						),
+						React.createElement(
+							"th",
+							null,
+							"Rating"
+						)
+					)
+				),
+				React.createElement(
+					"tbody",
+					null,
+					people
+				)
+			);
+		}
+	});
+	module.exports = Favourites;
+
+/***/ },
+/* 14 */
+/*!**********************************!*\
+  !*** ./js/components/browse.jsx ***!
+  \**********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Button = __webpack_require__(/*! ./button.jsx */ 6);
+	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 8);
+	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 7);
+	var Browse = React.createClass({
+		displayName: 'Browse',
+	
+		getInitialState: function getInitialState() {
+			return {
+				status: 'base',
+				index: null
+			};
+		},
+		handleClick: function handleClick(constant) {
+			console.log(constant);
+			appDispatcher.dispatch({
+				action: constant,
+				data: this.state.index
+			});
+		},
+		render: function render() {
+			var index = Math.floor(Math.random() * this.props.data.length);
+			this.state.index = index;
+			console.log(index);
+			return React.createElement(
+				'div',
+				{ id: 'browsePerson' },
+				React.createElement(
+					'h4',
+					null,
+					' ',
+					this.props.data[index].name,
+					React.createElement('br', null),
+					React.createElement('img', { src: this.props.data[index].emoticon })
+				),
+				React.createElement(
+					'p',
+					null,
+					' ',
+					this.props.data[index].bio
+				),
+				React.createElement(
+					'p',
+					null,
+					' ',
+					this.props.data[index].rating
+				),
+				React.createElement(
+					'div',
+					{ id: 'browseButtons' },
+					React.createElement(Button, { constant: Constants.LIKE, handleClick: this.handleClick }),
+					React.createElement(Button, { constant: Constants.DISLIKE, handleClick: this.handleClick })
+				)
+			);
+		}
+	});
+	
+	module.exports = Browse;
+
+/***/ },
+/* 15 */
+/*!*******************************!*\
+  !*** ./js/components/nav.jsx ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Button = __webpack_require__(/*! ./button.jsx */ 6);
+	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 7);
+	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 8);
+	var MainStore = __webpack_require__(/*! ../stores/mainStore.js */ 2);
+	var Nav = React.createClass({
+		displayName: 'Nav',
+	
+		getInitialState: function getInitialState() {
+			return {
+				page_state: 'home',
+				login_state: false
+			};
+		}, componentDidMount: function componentDidMount() {
+			MainStore.on('loggedIn', this.loggedIn);
+			MainStore.on('logout', this.logOut);
+		},
+		handleClick: function handleClick(constant) {
+			console.log(constant);
+			appDispatcher.dispatch({
+				action: constant
+			});
+		},
+		loggedIn: function loggedIn() {
+			this.setState({
+				login_state: true
+			});
+		}, logOut: function logOut() {
+			this.setState({
+				login_state: false
+			});
+		},
+	
+		render: function render() {
+			if (this.state.login_state == true) {
+				return React.createElement(
+					'header',
+					null,
+					' Missile Job Seeker',
+					React.createElement(
+						'nav',
+						{ id: 'navBar' },
+						React.createElement(Button, { constant: Constants.HOME_CLICKED, handleClick: this.handleClick }),
+						React.createElement(Button, { constant: Constants.BROWSE_CLICKED, handleClick: this.handleClick }),
+						React.createElement(Button, { constant: Constants.LOGOUT, handleClick: this.handleClick })
+					)
+				);
+			} else {
+				return React.createElement(
+					'header',
+					null,
+					' Missile Job Seeker',
+					React.createElement(
+						'nav',
+						{ id: 'navBar' },
+						React.createElement(Button, { constant: Constants.LOGIN_CLICKED, handleClick: this.handleClick })
+					)
+				);
+			}
+		}
+	});
+	
+	module.exports = Nav;
+
+/***/ },
+/* 16 */
 /*!**************************!*\
   !*** ./~/merge/merge.js ***!
   \**************************/
@@ -1003,10 +1400,10 @@
 		}
 	
 	})(typeof module === 'object' && module && typeof module.exports === 'object' && module.exports);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/module.js */ 9)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/module.js */ 17)(module)))
 
 /***/ },
-/* 9 */
+/* 17 */
 /*!***********************************!*\
   !*** (webpack)/buildin/module.js ***!
   \***********************************/
@@ -1025,7 +1422,7 @@
 
 
 /***/ },
-/* 10 */
+/* 18 */
 /*!****************************!*\
   !*** ./~/events/events.js ***!
   \****************************/
@@ -1334,398 +1731,6 @@
 	  return arg === void 0;
 	}
 
-
-/***/ },
-/* 11 */
-/*!************************************!*\
-  !*** ./js/constants/constants.jsx ***!
-  \************************************/
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	var Constants = {
-		HOME_CLICKED: 'Home',
-		BROWSE_CLICKED: 'Browse',
-		LOGIN_CLICKED: 'Login',
-		LIKE: 'Like',
-		DISLIKE: 'Dislike',
-		LOGIN_SUBMIT: 'Sign In',
-		LOGOUT: 'Log Out'
-	
-	};
-	module.exports = Constants;
-
-/***/ },
-/* 12 */
-/*!**************************************!*\
-  !*** ./js/components/peopleList.jsx ***!
-  \**************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var Person = __webpack_require__(/*! ./person.jsx */ 13);
-	var PeopleList = React.createClass({
-		displayName: "PeopleList",
-	
-		render: function render() {
-			var people = this.props.people.map(function (person, i) {
-				if (i % 2 == 0) {
-					return;
-				} else {
-					return React.createElement(Person, { key: i, name: person.name, bio: person.bio, rating: person.rating, emoticon: person.emoticon });
-				}
-			});
-			return React.createElement(
-				"table",
-				{ id: "table" },
-				React.createElement(
-					"caption",
-					{ id: "caption" },
-					"Highlights"
-				),
-				React.createElement(
-					"thead",
-					null,
-					React.createElement(
-						"tr",
-						null,
-						React.createElement(
-							"th",
-							null,
-							"Name"
-						),
-						React.createElement(
-							"th",
-							null,
-							"Bio"
-						),
-						React.createElement(
-							"th",
-							null,
-							"Rating"
-						)
-					)
-				),
-				React.createElement(
-					"tbody",
-					null,
-					people
-				)
-			);
-		}
-	});
-	
-	module.exports = PeopleList;
-
-/***/ },
-/* 13 */
-/*!**********************************!*\
-  !*** ./js/components/person.jsx ***!
-  \**********************************/
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	var Person = React.createClass({
-		displayName: "Person",
-	
-		render: function render() {
-			return React.createElement(
-				"tr",
-				null,
-				React.createElement(
-					"td",
-					null,
-					this.props.name
-				),
-				React.createElement(
-					"td",
-					{ id: "emoticon" },
-					React.createElement("img", { src: this.props.emoticon })
-				),
-				React.createElement(
-					"td",
-					null,
-					this.props.bio
-				),
-				React.createElement(
-					"td",
-					null,
-					this.props.rating
-				)
-			);
-		}
-	});
-	module.exports = Person;
-
-/***/ },
-/* 14 */
-/*!*************************************!*\
-  !*** ./js/components/loginForm.jsx ***!
-  \*************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Button = __webpack_require__(/*! ./button.jsx */ 15);
-	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 11);
-	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 3);
-	var LoginForm = React.createClass({
-		displayName: 'LoginForm',
-	
-		handleClick: function handleClick(constant) {
-			appDispatcher.dispatch({
-				action: constant,
-				data: { user: document.getElementById('name').value,
-					password: document.getElementById('password').value
-				}
-			});
-			console.log(constant);
-		},
-		render: function render() {
-			return React.createElement(
-				'div',
-				{ className: 'loginForm' },
-				React.createElement(
-					'h3',
-					null,
-					' Login Form '
-				),
-				React.createElement('input', { type: 'text', id: 'name', placeholder: 'username' }),
-				React.createElement('br', null),
-				React.createElement('input', { type: 'text', id: 'password', placeholder: 'password' }),
-				React.createElement('br', null),
-				React.createElement(Button, { constant: Constants.LOGIN_SUBMIT, handleClick: this.handleClick })
-			);
-		}
-	});
-	module.exports = LoginForm;
-
-/***/ },
-/* 15 */
-/*!**********************************!*\
-  !*** ./js/components/button.jsx ***!
-  \**********************************/
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	var Button = React.createClass({
-		displayName: "Button",
-	
-		handleClick: function handleClick() {
-			console.log('hlelo');
-			this.props.handleClick(this.props.constant);
-		},
-		render: function render() {
-			return React.createElement(
-				"div",
-				null,
-				React.createElement("input", { id: "button", type: "submit", value: this.props.constant, onClick: this.handleClick })
-			);
-		}
-	});
-	module.exports = Button;
-
-/***/ },
-/* 16 */
-/*!**************************************!*\
-  !*** ./js/components/favourites.jsx ***!
-  \**************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var Person = __webpack_require__(/*! ./person.jsx */ 13);
-	var Favourites = React.createClass({
-		displayName: "Favourites",
-	
-		render: function render() {
-			var people = this.props.favourites.map(function (person, i) {
-	
-				return React.createElement(Person, { key: i, name: person.name, bio: person.bio, rating: person.rating, emoticon: person.emoticon });
-			});
-			return React.createElement(
-				"table",
-				{ id: "table1" },
-				React.createElement(
-					"caption",
-					{ id: "caption" },
-					"Favourites"
-				),
-				React.createElement(
-					"thead",
-					null,
-					React.createElement(
-						"tr",
-						null,
-						React.createElement(
-							"th",
-							null,
-							"Name"
-						),
-						React.createElement(
-							"th",
-							null,
-							"Bio"
-						),
-						React.createElement(
-							"th",
-							null,
-							"Rating"
-						)
-					)
-				),
-				React.createElement(
-					"tbody",
-					null,
-					people
-				)
-			);
-		}
-	});
-	module.exports = Favourites;
-
-/***/ },
-/* 17 */
-/*!**********************************!*\
-  !*** ./js/components/browse.jsx ***!
-  \**********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Button = __webpack_require__(/*! ./button.jsx */ 15);
-	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 3);
-	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 11);
-	var Browse = React.createClass({
-		displayName: 'Browse',
-	
-		getInitialState: function getInitialState() {
-			return {
-				status: 'base',
-				index: null
-			};
-		},
-		handleClick: function handleClick(constant) {
-			console.log(constant);
-			appDispatcher.dispatch({
-				action: constant,
-				data: this.state.index
-			});
-		},
-		render: function render() {
-			var index = Math.floor(Math.random() * this.props.data.length);
-			this.state.index = index;
-			console.log(index);
-			return React.createElement(
-				'div',
-				{ id: 'browsePerson' },
-				React.createElement(
-					'h4',
-					null,
-					' ',
-					this.props.data[index].name,
-					React.createElement('br', null),
-					React.createElement('img', { src: this.props.data[index].emoticon })
-				),
-				React.createElement(
-					'p',
-					null,
-					' ',
-					this.props.data[index].bio
-				),
-				React.createElement(
-					'p',
-					null,
-					' ',
-					this.props.data[index].rating
-				),
-				React.createElement(
-					'div',
-					{ id: 'browseButtons' },
-					React.createElement(Button, { constant: Constants.LIKE, handleClick: this.handleClick }),
-					React.createElement(Button, { constant: Constants.DISLIKE, handleClick: this.handleClick })
-				)
-			);
-		}
-	});
-	
-	module.exports = Browse;
-
-/***/ },
-/* 18 */
-/*!*******************************!*\
-  !*** ./js/components/nav.jsx ***!
-  \*******************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Button = __webpack_require__(/*! ./button.jsx */ 15);
-	var Constants = __webpack_require__(/*! ../constants/constants.jsx */ 11);
-	var appDispatcher = __webpack_require__(/*! ../dispatcher/appDispatcher.js */ 3);
-	var MainStore = __webpack_require__(/*! ../stores/mainStore.js */ 2);
-	var Nav = React.createClass({
-		displayName: 'Nav',
-	
-		getInitialState: function getInitialState() {
-			return {
-				page_state: 'home',
-				login_state: false
-			};
-		}, componentDidMount: function componentDidMount() {
-			MainStore.on('loggedIn', this.loggedIn);
-			MainStore.on('logout', this.logOut);
-		},
-		handleClick: function handleClick(constant) {
-			console.log(constant);
-			appDispatcher.dispatch({
-				action: constant
-			});
-		},
-		loggedIn: function loggedIn() {
-			this.setState({
-				login_state: true
-			});
-		}, logOut: function logOut() {
-			this.setState({
-				login_state: false
-			});
-		},
-	
-		render: function render() {
-			if (this.state.login_state == true) {
-				return React.createElement(
-					'header',
-					null,
-					' Missile Job Seeker',
-					React.createElement(
-						'nav',
-						{ id: 'navBar' },
-						React.createElement(Button, { constant: Constants.HOME_CLICKED, handleClick: this.handleClick }),
-						React.createElement(Button, { constant: Constants.BROWSE_CLICKED, handleClick: this.handleClick }),
-						React.createElement(Button, { constant: Constants.LOGOUT, handleClick: this.handleClick })
-					)
-				);
-			} else {
-				return React.createElement(
-					'header',
-					null,
-					' Missile Job Seeker',
-					React.createElement(
-						'nav',
-						{ id: 'navBar' },
-						React.createElement(Button, { constant: Constants.LOGIN_CLICKED, handleClick: this.handleClick })
-					)
-				);
-			}
-		}
-	});
-	
-	module.exports = Nav;
 
 /***/ }
 /******/ ]);

@@ -57,12 +57,15 @@ var _data = {
     favourites: [],
     authUser: [{
         user: 'test',
-        password: 'test'
+        password: 'test',
+        favourites:[]
     }, {
         user: 'test1',
-        password: 'test1'
+        password: 'test1',
+        favourites: []
     }],
-    compareUser: {}
+    compareUser: {},
+    loggedIndex: 0
 }
 var MainStore = merge(EventEmitter.prototype, {
     getData: function() {
@@ -81,7 +84,7 @@ var MainStore = merge(EventEmitter.prototype, {
                 break;
             case Constants.LIKE:
                 MainStore.emit('liked');
-                _data.favourites.push(_data.people[payload.data]);
+                _data.authUser[_data.loggedIndex].favourites.push(_data.people[payload.data]);
                 break;
             case Constants.DISLIKE:
                 MainStore.emit('disliked');
@@ -94,6 +97,7 @@ var MainStore = merge(EventEmitter.prototype, {
                 break;
             case Constants.LOGOUT:
             	MainStore.emit('logout');
+            	_data.
             	break;
             default:
                 break;
@@ -105,6 +109,7 @@ var MainStore = merge(EventEmitter.prototype, {
     	for(var i = 0; i < _data.authUser.length; i++){
     		if(_data.authUser[i].user==_data.compareUser.user && _data.authUser[i].password==_data.compareUser.password ){
     			MainStore.emit('loggedIn');
+    			_data.loggedIndex = i;
     		}
     	}
     }

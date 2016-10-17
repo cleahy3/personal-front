@@ -58,11 +58,11 @@ var App = React.createClass({
 		switch(this.state.page){
 			case 'home':
 			console.log(this.state.data);
-			if(this.state.data.favourites[0]){
+			if(this.state.data.authUser[this.state.data.loggedIndex].favourites[0]){
 			return(
 			<div id="tables">
 			<PeopleList people={this.state.data.people} />
-			<Favourites favourites={this.state.data.favourites}/>
+			<Favourites favourites={this.state.data.authUser[this.state.data.loggedIndex].favourites}/>
 			</div>
 			)}else{
 				return(

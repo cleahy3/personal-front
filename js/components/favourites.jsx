@@ -1,6 +1,7 @@
 var Person = require('./person.jsx');
 var Favourites = React.createClass({
 	render: function(){
+		console.log(this.props.favourites);
 		var people = this.props.favourites.map(function(person,i){
 				
 					return( <Person key={i} name={person.name} bio={person.bio} rating={person.rating} emoticon={person.emoticon}/>)}
