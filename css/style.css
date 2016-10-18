@@ -1,43 +1,69 @@
-@import 'https://fonts.googleapis.com/css?family=Rubik+One';
+@import url('https://fonts.googleapis.com/css?family=Wendy+One');
 @import url('https://fonts.googleapis.com/css?family=Proza+Libre');
+body{
+	margin: 0px;
+}
 #app{
 	padding-top: 2em;
-	background: url(../img/office.jpg);
+	background: #93b1c6;
 	max-width: 90%;
 	margin:0px auto;
 	height:1450px;
 	max-height: 100%;
-	color: white;
+	color: #ff7148;
 	text-align: center;
 	font-family: 'Proza Libre', sans-serif;
 }
 header{
 	text-align: center;
-	font-family: 'Taviraj', serif;
-	font-size: 30px;
+	font-family: 'Wendy One', sans-serif;
+	font-size: 50px;
 	max-width: 90%;
+	padding-top: 1em;
+	padding-bottom: 1em;
 	margin: 0px auto;
 	display: block;
-	color: white;
-	background-color: black;
+	color: #ff7148;
+	background-color: #c7d0d5;
 }
 #navBar{
 	display:inline-flex;
+	padding-left: 1em;
 	margin-left:0px auto;
 	font-size: 20px;
 	text-align: center;
 	border-radius
 }
 #button {
-  color: #900;
-  margin-left: 1em;
-  border: 1px solid #900;
-  font-size: 20px;
-  font-weight: bold;
+  background: #ec583a;
+  background-image: -webkit-linear-gradient(top, #ff7148, #ff7148);
+  background-image: -moz-linear-gradient(top, #ff7148, #ff7148);
+  background-image: -ms-linear-gradient(top, #ff7148, #ff7148);
+  background-image: -o-linear-gradient(top, #ff7148, #ff7148);
+  background-image: linear-gradient(to bottom, #ff7148, #ff7148);
+  -webkit-border-radius: 13;
+  -moz-border-radius: 13;
+  border-radius: 13px;
+  text-shadow: 1px 1px 3px #62bcfa;
+  font-family: Arial;
+  color: #f5f5f5;
+  font-size: 17px;
+  padding: 8px 17px 8px 17px;
+  text-decoration: none;
+}
+#button:hover {
+  background: #93b1c6;
+  background-image: -webkit-linear-gradient(top, #ff7148, #ff7148);
+  background-image: -moz-linear-gradient(top, #ff7148, #ff7148);
+  background-image: -ms-linear-gradient(top, #ff7148, #ff7148);
+  background-image: -o-linear-gradient(top, #ff7148, #ff7148);
+  background-image: linear-gradient(to bottom, #ff7148, #ff7148);
+  text-decoration: none;
 }
 #table{
 	float: left;
-	color: white;
+	color: #f5f5f5;
+	background: #93b1c6
 	text-align: center;
 	font-family: 'Proza Libre', sans-serif;
 	max-width: 40%;
@@ -45,7 +71,7 @@ header{
 	clear:left;
 }
 #caption{
-	padding-top: 5em;
+	padding-top: 1em;
 	font-size: 20px;
 }
 #emoticon{
@@ -69,7 +95,15 @@ header{
 	text-align: center;
 	float: right;
 	font-family: 'Proza Libre', sans-serif;
-	max-width: 40%;
+	max-width: 45%;
 	margin: 2em;
 	clear: right;
 }
+input{
+	font-size:20px;
+	margin: 0.5em;
+}
+@media (max-width: 1100px) {
+  img {
+    display: none;
+  }

@@ -9,7 +9,6 @@ var Browse = React.createClass({
 	    };
 	},
 	handleClick: function(constant){
-		console.log(constant);
 		appDispatcher.dispatch({
 			action:constant,
 			data:this.state.index
@@ -19,7 +18,6 @@ var Browse = React.createClass({
 	render :function (){
 		var index = Math.floor((Math.random() * this.props.data.length));
 		this.state.index= index;
-		console.log(index);
 		return(
 			<div id="browsePerson">
 				<h4> {this.props.data[index].name}<br/><img src={this.props.data[index].emoticon} /></h4>

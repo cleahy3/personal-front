@@ -1,6 +1,5 @@
 var Button = React.createClass({
 handleClick: function(){
-console.log('hlelo');
  this.props.handleClick(this.props.constant);
 },
 render: function(){

@@ -1,7 +1,9 @@
 var MainStore = require('../stores/mainStore.js');
 var PeopleList = require('./peopleList.jsx');
 var LoginForm = require('./loginForm.jsx');
+var NewPerson = require('./newPerson.jsx');
 var Favourites = require('./favourites.jsx');
+var Registration  = require('./reg.jsx');
 var Browse = require('./browse.jsx');
 var App = React.createClass({
 	getInitialState:function() {
@@ -15,24 +17,31 @@ var App = React.createClass({
 	      MainStore.on('showLogin',this.showLogin);
 	      MainStore.on('disliked',this.showDislike);
 	      MainStore.on('liked',this.showLike);
-	      MainStore.on('loggedIn', this.showHome);
+	      MainStore.on('new', this.showNew);
+	      MainStore.on('navReg', this.showReg);
+	},showNew: function(){
+		this.setState({
+			page:'new'
+		})
 	},
 	showLogin: function(){
-		console.log('login clicked');
 		this.setState({
 			page:'login'
+		})
+	},showReg: function(){
+		
+		this.setState({
+			page:'reg'
 		})
 	},
 	showHome: function(){
 		var data  = MainStore.getData();
-		console.log(data)
 		this.setState({
 			page:'home',
 			data: data
 		})
 	},
 	showBrowse: function(){
-		console.log('browse');
 		var data = MainStore.getData();
 		this.setState({
 			page: 'browse',
@@ -41,14 +50,12 @@ var App = React.createClass({
 	},
 	showDislike: function(){
 		var data = MainStore.getData();
-		console.log('dislike');
 		this.setState({
 			page: 'dislike',
 			data: data
 		});
 	},showLike: function(){
 		var data = MainStore.getData();
-		console.log('like');
 		this.setState({
 			page: 'like',
 			data: data
@@ -57,7 +64,6 @@ var App = React.createClass({
 	render:function(){
 		switch(this.state.page){
 			case 'home':
-			console.log(this.state.data);
 			if(this.state.data.authUser[this.state.data.loggedIndex].favourites[0]){
 			return(
 			<div id="tables">
@@ -88,6 +94,12 @@ var App = React.createClass({
 			case 'login':
 				return(<LoginForm />)
 			break;
+			case 'new':
+				return(<NewPerson />)
+			break;
+			case 'reg':
+				return(<Registration />)
+				break;
 			default:
 			return(
 				<h1> Welcome to the Jobsite for employers and employees alike</h1>

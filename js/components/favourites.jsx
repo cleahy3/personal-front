@@ -9,7 +9,7 @@ var Favourites = React.createClass({
 				
 				)
 		return(
-				<table id="table1" ><caption id="caption">Favourites</caption><thead><tr><th>Name</th><th>Bio</th><th>Rating</th></tr></thead>
+				<table id="table1" ><caption id="caption">Favourites</caption><thead><tr><th>Name</th><th>Head Shot</th><th>Bio</th><th>Rating</th></tr></thead>
 				<tbody>
 				{people}
 				</tbody>

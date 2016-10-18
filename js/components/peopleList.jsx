@@ -8,7 +8,7 @@ var PeopleList = React.createClass({
 				
 				)
 		return(
-				<table id="table" ><caption id="caption">Highlights</caption><thead><tr><th>Name</th><th>Bio</th><th>Rating</th></tr></thead>
+				<table id="table" ><caption id="caption">Highlights</caption><thead><tr><th>Name</th><th>Head Shot</th><th>Bio</th><th>Rating</th></tr></thead>
 				<tbody>
 				{people}
 				</tbody>

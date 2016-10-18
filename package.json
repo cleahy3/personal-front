@@ -11,6 +11,11 @@
     "babel-preset-react": "^6.16.0",
     "flux": "^3.0.0",
     "merge": "^1.2.0",
+    "react": "^15.3.2",
+    "react-addons-css-transition-group": "^15.3.2",
+    "react-alert": "^1.0.14",
+    "react-dom": "^15.3.2",
+    "react-s-alert": "^1.2.0",
     "webpack": "^1.13.2"
   },
   "devDependencies": {},

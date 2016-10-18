@@ -5,7 +5,11 @@ var Constants = {
 	LIKE: 'Like',
 	DISLIKE: 'Dislike',
 	LOGIN_SUBMIT: 'Sign In',
-	LOGOUT: 'Log Out'
+	LOGOUT: 'Log Out',
+	NEW_CLICKED: 'New Person',
+	NEW_SUBMIT: 'Add New',
+	REG_CLICKED: 'Register',
+	REG_SUBMIT: 'Sign Up'
 
 }
 module.exports = Constants;

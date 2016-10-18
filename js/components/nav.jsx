@@ -9,11 +9,10 @@ var Nav = React.createClass({
 	         login_state: false
 	    };
 	},componentDidMount: function() {
-	      MainStore.on('loggedIn',this.loggedIn);
+	      MainStore.on('showHome',this.loggedIn);
 	      MainStore.on('logout', this.logOut);
 	},
 	handleClick : function(constant){
-		console.log(constant)
 		appDispatcher.dispatch({
 			action:constant
 		})
@@ -30,15 +29,17 @@ var Nav = React.createClass({
 	
 	render:function(){
 		if(this.state.login_state == true){
-		return(<header> Missile Job Seeker<nav id="navBar">
+		return(<header> People Seeker<nav id="navBar">
 					<Button constant={Constants.HOME_CLICKED} handleClick={this.handleClick}/>
 					<Button constant={Constants.BROWSE_CLICKED} handleClick={this.handleClick}/>
+					<Button constant={Constants.NEW_CLICKED} handleClick={this.handleClick} />
 					<Button constant={Constants.LOGOUT} handleClick={this.handleClick} />
 					</nav>
 				</header>
 			)}else{
-			return(<header> Missile Job Seeker<nav id="navBar">
+			return(<header> People Seeker<nav id="navBar">
 					<Button constant={Constants.LOGIN_CLICKED} handleClick={this.handleClick}/>
+					<Button constant={Constants.REG_CLICKED} handleClick={this.handleClick}/>
 					</nav>
 				</header>
 			)
