@@ -1,0 +1,1 @@
+web: python -m index.html runserver
