@@ -26656,10 +26656,10 @@
 			});
 			return React.createElement(
 				'div',
-				{ className: 'col s6' },
+				{ className: 'col s12 m6' },
 				React.createElement(
 					'table',
-					{ className: 'striped responsive-table', id: 'table' },
+					{ className: 'striped', id: 'table' },
 					React.createElement(
 						'caption',
 						{ id: 'caption' },
@@ -28370,10 +28370,10 @@
 			});
 			return React.createElement(
 				'div',
-				{ className: 'col s6' },
+				{ className: 'col s12 m6' },
 				React.createElement(
 					'table',
-					{ className: 'striped responsive-table', id: 'table1' },
+					{ className: 'striped', id: 'table1' },
 					React.createElement(
 						'caption',
 						{ id: 'caption' },
@@ -28685,7 +28685,7 @@
 					),
 					React.createElement(
 						'h3',
-						{ id: 'title', className: 'col s5' },
+						{ id: 'title', className: 'col s9 m5 ' },
 						' People Seeker'
 					),
 					React.createElement(
@@ -28757,7 +28757,7 @@
 					),
 					React.createElement(
 						'h3',
-						{ id: 'title', className: 'col s5' },
+						{ id: 'title', className: 'col s8 m5' },
 						' People Seeker'
 					),
 					React.createElement(

@@ -19,8 +19,8 @@ var PeopleList = React.createClass({
 				
 				)}});
 		return(
-			<div className="col s6">
-				<table className="striped responsive-table" id="table"><caption id="caption">Highlights</caption><thead><tr><th>Name</th><th>Head Shot</th><th>Bio</th><th>Rating</th></tr></thead>
+			<div className="col s12 m6">
+				<table className="striped" id="table"><caption id="caption">Highlights</caption><thead><tr><th>Name</th><th>Head Shot</th><th>Bio</th><th>Rating</th></tr></thead>
 				<tbody>
 				{people}
 				</tbody>

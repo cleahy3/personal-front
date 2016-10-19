@@ -18,8 +18,8 @@ var Favourites = React.createClass({
 				
 				
 				)
-		return(	<div className="col s6">
-				<table className="striped responsive-table" id="table1"><caption id="caption">Favourites</caption><thead><tr><th>Name</th><th>Head Shot</th><th>Bio</th><th>Rating</th></tr></thead>
+		return(	<div className="col s12 m6">
+				<table className="striped" id="table1"><caption id="caption">Favourites</caption><thead><tr><th>Name</th><th>Head Shot</th><th>Bio</th><th>Rating</th></tr></thead>
 				<tbody>
 				{people}
 				</tbody>
