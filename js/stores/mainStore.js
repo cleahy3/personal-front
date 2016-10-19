@@ -1,6 +1,9 @@
+
+
 var appDispatcher = require('../dispatcher/appDispatcher.js');
 var merge = require('merge');
 var EventEmitter = require('events').EventEmitter;
+var Alert = require('react-uikit-alert').default;
 var axios = require('axios');
 var Constants = require('../constants/constants.jsx');
 var _data;
@@ -101,12 +104,44 @@ var MainStore = merge(EventEmitter.prototype, {
                 MainStore.emit('showLogin');
                 break;
             case Constants.LIKE:
-                MainStore.emit('liked');
-                _data.authUser[_data.loggedIndex].favourites.push(_data.people[payload.data]);
+
+                var push = true;
+                for (var i = 0; i < _data.authUser[_data.loggedIndex].favourites.length; i++) {
+                    if (_data.authUser[_data.loggedIndex].favourites[i].name == _data.people[payload.data].name) {
+                        push = false;
+                    }
+                }
+                if (push == true) {
+                    _data.authUser[_data.loggedIndex].favourites.push(_data.people[payload.data]);
+                    _data.people[payload.data].isLiked = true;
+                    if (payload.page) {
+                        MainStore.emit('showHome');
+                    } else {
+                        MainStore.emit('liked');
+                    }
+                } else {
+                    alert('you already have this person in your favourites');
+                }
                 break;
             case Constants.DISLIKE:
-                MainStore.emit('disliked');
-                _data.people.splice(payload.data, 1);
+                if (payload.page) {
+                    MainStore.emit('showHome');
+                    _data.authUser[_data.loggedIndex].favourites.splice(payload.data, 1);
+                } else {
+
+
+                    MainStore.emit('disliked');
+                    var name = _data.people[payload.data].name;
+                    console.log(name);
+                    for (var i = 0; i < _data.authUser[_data.loggedIndex].favourites.length; i++) {
+                        if (_data.authUser[_data.loggedIndex].favourites[i].name == name) {
+                            _data.authUser[_data.loggedIndex].favourites.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+
+
                 break;
             case Constants.LOGIN_SUBMIT:
 

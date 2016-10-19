@@ -5,7 +5,7 @@ handleClick: function(){
 render: function(){
 	return(
 		<div>
-			<a className={this.props.classN} onClick={this.handleClick}>{this.props.constant}</a>
+			<a className={this.props.classN} onClick={this.handleClick}><i className="material-icons">{this.props.constant}</i></a>
 		</div>
 	)
 }

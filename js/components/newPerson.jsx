@@ -15,13 +15,13 @@ var NewPerson = React.createClass({
 		})
 	},
 	render: function(){
-		return(<div className="NewPersonForm">
-				<h1> New Person</h1>
-				<input type="text" id="name" placeholder="name" size="25"/><br/>
-				<input type="text" id="bio" placeholder="bio" size="25" height="4"/><br/>
-				<input type="text" id="rating" placeholder="rating" size="25"/><br/>
-				<input type="text" id="image" placeholder="link to image" size="25"/><br/>
-				<Button constant={Constants.NEW_SUBMIT} handleClick={this.handleClick}/>
+		return(<div className="row">
+				<div className="col s6 offset-s3"><h3> New Person</h3></div>
+				<div className="input-field col s6 offset-s3"><input type="text" id="name" placeholder="name" size="25" required/></div><br/>
+				<div className="input-field col s6 offset-s3"><input type="text" id="bio" placeholder="bio" size="25" height="4" required/></div><br/>
+				<div className="input-field col s6 offset-s3"><input type="text" id="rating" placeholder="rating" size="25" required/></div><br/>
+				<div className="input-field col s6 offset-s3"><input type="text" id="image" placeholder="link to image" size="25" required/></div><br/>
+				<div className="col s6 offset-s3"><Button classN="waves-effect waves-light btn-large indigo lighten-1" constant={Constants.NEW_SUBMIT} handleClick={this.handleClick}/></div>
 			</div>)
 	}
 })

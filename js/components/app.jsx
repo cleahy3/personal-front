@@ -1,10 +1,13 @@
-var MainStore = require('../stores/mainStore.js');
-var PeopleList = require('./peopleList.jsx');
-var LoginForm = require('./loginForm.jsx');
-var NewPerson = require('./newPerson.jsx');
-var Favourites = require('./favourites.jsx');
-var Registration  = require('./reg.jsx');
-var Browse = require('./browse.jsx');
+import MainStore from '../stores/mainStore.js';
+import React from 'react';
+import PeopleList from './peopleList.jsx';
+import LoginForm from './loginForm.jsx';
+import NewPerson from './newPerson.jsx';
+import Favourites from './favourites.jsx';
+import Materialize from 'materialize';
+import Notifications,{notify} from 'react-notify-toast';
+import Registration  from './reg.jsx';
+import Browse from './browse.jsx';
 var App = React.createClass({
 	getInitialState:function() {
 	    return {
@@ -14,6 +17,7 @@ var App = React.createClass({
 	componentDidMount: function() {
 	      MainStore.on('showHome',this.showHome);
 	      MainStore.on('showBrowse',this.showBrowse);
+	      MainStore.on('logout',this.showLogin);
 	      MainStore.on('showLogin',this.showLogin);
 	      MainStore.on('disliked',this.showDislike);
 	      MainStore.on('liked',this.showLike);
@@ -62,11 +66,12 @@ var App = React.createClass({
 		});
 	},
 	render:function(){
+		
 		switch(this.state.page){
 			case 'home':
 			if(this.state.data.authUser[this.state.data.loggedIndex].favourites[0]){
 			return(
-			<div id="tables">
+			<div id="tables" className="row">
 			<PeopleList people={this.state.data.people} />
 			<Favourites favourites={this.state.data.authUser[this.state.data.loggedIndex].favourites}/>
 			</div>
@@ -102,7 +107,7 @@ var App = React.createClass({
 				break;
 			default:
 			return(
-				<h1> Welcome to the Jobsite for employers and employees alike</h1>
+				<div className="row"><div className="col s6 offset-s3"><h3> Welcome to the Jobsite for employers and employees alike</h3></div></div>
 			)
 			break;
 		}
