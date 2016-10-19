@@ -180,7 +180,7 @@ var MainStore = merge(EventEmitter.prototype, {
 
         for (var i = 0; i < _data.authUser.length; i++) {
             if (_data.authUser[i].user == _data.compareUser.user && _data.authUser[i].password == _data.compareUser.password) {
-                document.cookie="logStatus=true;expires="+now.toUTCString()+";";
+                document.cookie="logStatus=true;expires="+now.toTimeString()+";";
                 MainStore.emit('showHome');
                 _data.loggedIndex = i;
                 user = true;

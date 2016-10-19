@@ -48,7 +48,7 @@ var Nav = React.createClass({
 		time += 3600 * 1000;
 		now.setTime(time);
 		document.cookie = 
-		'logStatus=false; expires=' + now.toUTCString();
+		'logStatus=false; expires=' + now.toTimeString();
 	},
 	
 	render:function(){
