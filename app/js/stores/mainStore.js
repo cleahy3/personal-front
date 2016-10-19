@@ -79,12 +79,12 @@ var MainStore = merge(EventEmitter.prototype, {
         if (_data) {
             axios({
                 method: 'post',
-                url: 'http://localhost:3000/',
+                url: 'https://people-server.herokuapp.com/',
                 data: _data
 
             });
         } else {
-            axios.get('http://localhost:3000/')
+            axios.get('https://people-server.herokuapp.com/')
                 .then(function(response) {
 
                     _data = response.data;
