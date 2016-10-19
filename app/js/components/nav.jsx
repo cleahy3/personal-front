@@ -47,7 +47,12 @@ var Nav = React.createClass({
 			
 			)}else{
 			return(<nav className="row deep-purple lighten-2" id="navBar"><i id="logo" className="col s2 large material-icons">thumbs_up_down</i><h3 id="title"  className="col s5"> People Seeker</h3>
+					<a href="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
 					<ul id="nav-mobile" className="right hide-on-med-and-down">
+					<li><Button classN="button" constant={Constants.LOGIN_CLICKED} handleClick={this.handleClick}/></li>
+					<li><Button classN="button" constant={Constants.REG_CLICKED} handleClick={this.handleClick}/></li>
+					</ul>
+					<ul id="mobile-demo" className="side-nav">
 					<li><Button classN="button" constant={Constants.LOGIN_CLICKED} handleClick={this.handleClick}/></li>
 					<li><Button classN="button" constant={Constants.REG_CLICKED} handleClick={this.handleClick}/></li>
 					</ul>

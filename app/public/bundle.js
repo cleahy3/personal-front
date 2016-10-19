@@ -28761,8 +28761,31 @@
 						' People Seeker'
 					),
 					React.createElement(
+						'a',
+						{ href: '#', 'data-activates': 'mobile-demo', className: 'button-collapse' },
+						React.createElement(
+							'i',
+							{ className: 'material-icons' },
+							'menu'
+						)
+					),
+					React.createElement(
 						'ul',
 						{ id: 'nav-mobile', className: 'right hide-on-med-and-down' },
+						React.createElement(
+							'li',
+							null,
+							React.createElement(Button, { classN: 'button', constant: Constants.LOGIN_CLICKED, handleClick: this.handleClick })
+						),
+						React.createElement(
+							'li',
+							null,
+							React.createElement(Button, { classN: 'button', constant: Constants.REG_CLICKED, handleClick: this.handleClick })
+						)
+					),
+					React.createElement(
+						'ul',
+						{ id: 'mobile-demo', className: 'side-nav' },
 						React.createElement(
 							'li',
 							null,
