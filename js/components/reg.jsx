@@ -21,7 +21,7 @@ var Registration = React.createClass({
 	},
 	render: function(){
 		return(<div className="row">
-			<h3> Registration </h3>
+			<h3> Registration <i className="medium material-icons">assignment_ind</i> </h3>
 			<div className="input-field col s6 offset-s3"><input type="text" id="user" placeholder="user name" size="25" required/></div><br/>
 			<div className="input-field col s6 offset-s3"><input type="password" id="password" placeholder="password" size="25" height="4" required/></div><br/>
 			<div className="input-field col s6 offset-s3"><input type="email" id="email" placeholder="email" size="25" required/></div><br/>
