@@ -23,6 +23,13 @@ var App = React.createClass({
 	      MainStore.on('liked',this.showLike);
 	      MainStore.on('new', this.showNew);
 	      MainStore.on('navReg', this.showReg);
+	      MainStore.on('cantLike',this.showProblem);
+
+	},showProblem:function(){
+		this.setState({
+	      		page:'homeish',
+	      		problem:'already exists'
+	      	})
 	},showNew: function(){
 		this.setState({
 			page:'new'
@@ -90,11 +97,11 @@ var App = React.createClass({
 			break;
 			case 'dislike':
 			return (
-			<h3> The Person You Clicked Has Been Removed from your list </h3>)
+			<span><h3 id="problem"> The Person You Clicked Has Been Removed from your list </h3><Browse data={this.state.data.people} /></span>)
 			break;
 			case 'like':
 			return (
-				<h3> The Person You Clicked Has Been Added To Your Favourites </h3>)
+				<span><h3> The Person You Clicked Has Been Added To Your Favourites </h3><Browse data={this.state.data.people} /></span>)
 			break;
 			case 'login':
 				return(<LoginForm />)
@@ -104,7 +111,18 @@ var App = React.createClass({
 			break;
 			case 'reg':
 				return(<Registration />)
-				break;
+			break;
+			case 'homeish':
+			
+			return(
+			<div id="tables" className="row">
+			<h5 id="problem"> Already in favourites </h5>
+			<PeopleList people={this.state.data.people} />
+			<Favourites favourites={this.state.data.authUser[this.state.data.loggedIndex].favourites}/>
+			</div>
+			
+			)
+			break;
 			default:
 			return(
 				<div className="row"><div className="col s6 offset-s3"><h3> Welcome to the Jobsite for employers and employees alike</h3></div></div>

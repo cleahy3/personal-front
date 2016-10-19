@@ -1,10 +1,9 @@
-
-
 var appDispatcher = require('../dispatcher/appDispatcher.js');
 var merge = require('merge');
 var EventEmitter = require('events').EventEmitter;
 var Alert = require('react-uikit-alert').default;
 var axios = require('axios');
+import Popup from 'react-popup';
 var Constants = require('../constants/constants.jsx');
 var _data;
 //     people: [{
@@ -119,8 +118,7 @@ var MainStore = merge(EventEmitter.prototype, {
                     } else {
                         MainStore.emit('liked');
                     }
-                } else {
-                    alert('you already have this person in your favourites');
+                } else { MainStore.emit('cantLike');
                 }
                 break;
             case Constants.DISLIKE:

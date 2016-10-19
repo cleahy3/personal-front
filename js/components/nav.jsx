@@ -29,7 +29,7 @@ var Nav = React.createClass({
 	
 	render:function(){
 		if(this.state.login_state == true){
-		return(<nav className="row deep-purple lighten-2" id="navBar"><h3 id="title" className="col s5"> People Seeker</h3>
+		return(<nav className="row deep-purple lighten-2" id="navBar"><i id="logo" className="col s2 large material-icons">thumbs_up_down </i><h3 id="title" className="col s5"> People Seeker</h3>
 			<ul id="nav-mobile" className="right">
 					<li><Button classN="button" constant={Constants.HOME_CLICKED} handleClick={this.handleClick}/></li>
 					<li><Button classN="button" constant={Constants.BROWSE_CLICKED} handleClick={this.handleClick}/></li>
@@ -39,7 +39,7 @@ var Nav = React.createClass({
 					</nav>
 			
 			)}else{
-			return(<nav className="row deep-purple lighten-2" id="navBar"><h3 id="title"  className="col s5"> People Seeker</h3>
+			return(<nav className="row deep-purple lighten-2" id="navBar"><i id="logo" className="col s2 large material-icons">thumbs_up_down</i><h3 id="title"  className="col s5"> People Seeker</h3>
 					<ul id="nav-mobile" className="right hide-on-med-and-down">
 					<li><Button classN="button" constant={Constants.LOGIN_CLICKED} handleClick={this.handleClick}/></li>
 					<li><Button classN="button" constant={Constants.REG_CLICKED} handleClick={this.handleClick}/></li>
