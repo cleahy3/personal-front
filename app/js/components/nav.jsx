@@ -30,11 +30,18 @@ var Nav = React.createClass({
 	render:function(){
 		if(this.state.login_state == true){
 		return(<nav className="row deep-purple lighten-2" id="navBar"><i id="logo" className="col s2 large material-icons">thumbs_up_down </i><h3 id="title" className="col s5"> People Seeker</h3>
-			<ul id="nav-mobile" className="right">
+			<a href="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
+			<ul  className="right">
 					<li><Button classN="button" constant={Constants.HOME_CLICKED} handleClick={this.handleClick}/></li>
 					<li><Button classN="button" constant={Constants.BROWSE_CLICKED} handleClick={this.handleClick}/></li>
 					<li><Button classN="button" constant={Constants.NEW_CLICKED} handleClick={this.handleClick} /></li>
 					<li><Button classN="button" constant={Constants.LOGOUT} handleClick={this.handleClick} /></li>
+				</ul>
+				<ul id="mobile-demo" className="side-nav">
+					<li><Button classN="b" constant={Constants.HOME_CLICKED} handleClick={this.handleClick}/></li>
+					<li><Button classN="b" constant={Constants.BROWSE_CLICKED} handleClick={this.handleClick}/></li>
+					<li><Button classN="b" constant={Constants.NEW_CLICKED} handleClick={this.handleClick} /></li>
+					<li><Button classN="b" constant={Constants.LOGOUT} handleClick={this.handleClick} /></li>
 				</ul>
 					</nav>
 			
