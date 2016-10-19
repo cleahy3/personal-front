@@ -1,3 +1,3 @@
 
-web: php -S
+web: web: node app.js
 
