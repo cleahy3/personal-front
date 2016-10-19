@@ -25813,6 +25813,10 @@
 	    if (config.cancelToken) {
 	      // Handle cancellation
 	      config.cancelToken.promise.then(function onCanceled(cancel) {
+	        if (!request) {
+	          return;
+	        }
+	
 	        request.abort();
 	        reject(cancel);
 	        // Clean up request
