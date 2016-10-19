@@ -23443,8 +23443,14 @@
 	    handleLogin: function handleLogin() {
 	        var pass = false;
 	        var user = false;
+	        var now = new Date();
+	        var time = now.getTime();
+	        time += 3600 * 1000;
+	        now.setTime(time);
+	
 	        for (var i = 0; i < _data.authUser.length; i++) {
 	            if (_data.authUser[i].user == _data.compareUser.user && _data.authUser[i].password == _data.compareUser.password) {
+	                document.cookie = "logStatus=true;expires=" + now.toUTCString() + ";";
 	                MainStore.emit('showHome');
 	                _data.loggedIndex = i;
 	                user = true;
@@ -28650,10 +28656,16 @@
 		displayName: 'Nav',
 	
 		getInitialState: function getInitialState() {
-			return {
-				page_state: 'home',
-				login_state: false
-			};
+			var i = this.getCookie('logStatus');
+			console.log(i);
+			if (i == 'true') {
+				return {
+					page_state: 'home',
+					login_state: true
+				};
+			} else {
+				return { page_state: 'home', login_state: false };
+			}
 		}, componentDidMount: function componentDidMount() {
 			MainStore.on('showHome', this.loggedIn);
 			MainStore.on('logout', this.logOut);
@@ -28663,6 +28675,20 @@
 				action: constant
 			});
 		},
+		getCookie: function getCookie(cname) {
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		},
 		loggedIn: function loggedIn() {
 			this.setState({
 				login_state: true
@@ -28671,6 +28697,11 @@
 			this.setState({
 				login_state: false
 			});
+			var now = new Date();
+			var time = now.getTime();
+			time += 3600 * 1000;
+			now.setTime(time);
+			document.cookie = 'logStatus=false; expires=' + now.toUTCString();
 		},
 	
 		render: function render() {
