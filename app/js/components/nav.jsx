@@ -53,9 +53,9 @@ var Nav = React.createClass({
 	
 	render:function(){
 		if(this.state.login_state == true){
-		return(<nav className="row deep-purple lighten-2" id="navBar"><i id="logo" className="col s2 large material-icons">thumbs_up_down </i><h3 id="title" className="col s9 m5 "> People Seeker</h3>
+		return(<nav className="row deep-purple lighten-2" id="navBar"><i id="logo" className="col s2 large material-icons">thumbs_up_down </i><h3 id="title" className="col s8 m5 "> People Seeker</h3>
 			<a href="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
-			<ul  className="right">
+			<ul  className="right hide-on-med-and-down">
 					<li><Button classN="button" constant={Constants.HOME_CLICKED} handleClick={this.handleClick}/></li>
 					<li><Button classN="button" constant={Constants.BROWSE_CLICKED} handleClick={this.handleClick}/></li>
 					<li><Button classN="button" constant={Constants.NEW_CLICKED} handleClick={this.handleClick} /></li>
